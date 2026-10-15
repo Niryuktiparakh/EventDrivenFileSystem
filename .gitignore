@@ -1,0 +1,23 @@
+# Python virtual environment
+venv/
+.venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local databases
+*.db
+*.sqlite3
+
+# Generated file versions
+storage/versions/
+
+# Editor settings and test cache
+.vscode/
+.pytest_cache/

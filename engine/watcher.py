@@ -1,11 +1,26 @@
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from datetime import datetime
+import os
+import sys
+from typing import Optional
 
 from engine.events import FileEvent
+from journal import Journal
 
 
 class WatcherHandler(FileSystemEventHandler):
+    def __init__(self, journal: Optional[Journal] = None):
+        super().__init__()
+        self.journal = journal
+
+    def _record(self, file_event):
+        file_event.pid = os.getpid()
+        file_event.parent_pid = os.getppid()
+        file_event.process_path = sys.executable
+        if self.journal is not None:
+            self.journal.append(file_event)
+        print_event(file_event)
 
     def on_created(self, event):
 
@@ -18,7 +33,7 @@ class WatcherHandler(FileSystemEventHandler):
             timestamp=datetime.now()
         )
 
-        print_event(file_event)
+        self._record(file_event)
 
     def on_modified(self, event):
 
@@ -31,7 +46,7 @@ class WatcherHandler(FileSystemEventHandler):
             timestamp=datetime.now()
         )
 
-        print_event(file_event)
+        self._record(file_event)
 
     def on_deleted(self, event):
 
@@ -44,7 +59,7 @@ class WatcherHandler(FileSystemEventHandler):
             timestamp=datetime.now()
         )
 
-        print_event(file_event)
+        self._record(file_event)
 
     def on_moved(self, event):
 
@@ -58,7 +73,7 @@ class WatcherHandler(FileSystemEventHandler):
             old_path=event.src_path
         )
 
-        print_event(file_event)
+        self._record(file_event)
 
 
 def print_event(file_event):
@@ -75,11 +90,12 @@ def print_event(file_event):
         print("File:", file_event.path)
 
 
-def start_watcher(folder):
+def start_watcher(folder, journal_path=None):
 
     observer = Observer()
 
-    handler = WatcherHandler()
+    journal = Journal(journal_path) if journal_path is not None else None
+    handler = WatcherHandler(journal)
 
     observer.schedule(
         handler,
@@ -104,3 +120,5 @@ def start_watcher(folder):
         observer.stop()
 
     observer.join()
+    if journal is not None:
+        journal.close()

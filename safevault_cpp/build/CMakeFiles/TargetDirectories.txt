@@ -1,0 +1,4 @@
+D:/3rd_year/OS/EventDrivenFileSystem/safevault_cpp/build/CMakeFiles/sqlite3_lib.dir
+D:/3rd_year/OS/EventDrivenFileSystem/safevault_cpp/build/CMakeFiles/safevault.dir
+D:/3rd_year/OS/EventDrivenFileSystem/safevault_cpp/build/CMakeFiles/edit_cache.dir
+D:/3rd_year/OS/EventDrivenFileSystem/safevault_cpp/build/CMakeFiles/rebuild_cache.dir

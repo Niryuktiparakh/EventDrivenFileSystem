@@ -1,4 +1,5 @@
-#include "watch.hpp"
+#include "etw_watcher.hpp"
+
 
 #include <algorithm>
 #include <atomic>
@@ -494,9 +495,9 @@ void watch(const std::filesystem::path& root,
 
     // Background: OS watcher → queue
     std::thread watcher_thread([&]() {
-        try { platform_watch_thread(root, queue, stop_flag); }
+        try { start_etw_watcher(root, queue, stop_flag); }
         catch (const std::exception& e) {
-            std::cerr << "Watcher thread error: " << e.what() << "\n";
+            std::cerr << "[Watcher] ETW thread error: " << e.what() << "\n";
         }
     });
 

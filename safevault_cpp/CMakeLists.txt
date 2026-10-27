@@ -28,7 +28,7 @@ add_executable(safevault
     src/journal.cpp
     src/passthrough.cpp
     src/search.cpp
-    src/watch.cpp
+    src/etw_watcher.cpp
 )
 
 target_include_directories(safevault PRIVATE
